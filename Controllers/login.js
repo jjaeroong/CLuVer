@@ -1,44 +1,37 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const { User } = require("../models");
-const session = require("express-session");
-const secretKey = 'mySecretKey'
-//로그인 시도
-exports.login = async (req, res) => {
-  const { username, password } = req.body;
-  try {
-    const user = await User.findOne({
-      where: { username: username }
-    });
-    
-    // const isPasswordCorrect = await bcrypt.compareSync(password, user.password);
-    if (!user || password!=user.password) {
-      
-      console.log(username,password,user.username,user.password)
-      return res.status(400).json({ message: "이메일 또는 비밀번호가 틀렸습니다." });
-      
-    }
-   // 예를 들어 데이터베이스에서 사용자 정보를 가져옴
+const passport = require('passport');
+const User = require('../models/user');
+const bcrypt = require('bcrypt');
 
-    // 세션에 사용자 정보 저장
-    req.session.user = user;
-    const accessToken = jwt.sign(
-      {
-        username: user.username,
-        primaryKey: user.id,
-      },
-      secretKey,
-      {
-        expiresIn: "30m",
-      }
-    );
-    console.log(accessToken, "로그인 엑세스토큰");
-    req.session.access_token = accessToken;
-    console.log(req.session.access_token, "할당된 토큰");
-   
-    res.redirect("/mainpage");
-  } catch (err) {
-    console.log("오류ㅜㅜ")
-    return res.status(500).json({ message: err.message });
-  }
+exports.login = async (req, res, next) => {
+    const id = req.body.id;
+    const password = req.body.password;
+
+    try {
+        // 해당 아이디를 가진 사용자를 데이터베이스에서 찾습니다.
+        const user = await User.findOne({ where: { id: id } });
+
+        // 사용자가 존재하지 않으면 404 상태 코드를 반환합니다.
+        if (!user) {
+            return res.status(404).json({ message: '존재하지 않는 사용자입니다.' });
+        }
+
+        
+        // 비밀번호가 일치하지 않으면 401 상태 코드를 반환합니다.
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) {
+            return res.status(401).json({ message: '비밀번호가 일치하지 않습니다.' });
+        }
+
+        // 사용자를 로그인 처리합니다.
+        req.login(user, (err) => {
+            if (err) {
+                return next(err);
+            }
+            // 로그인이 성공한 경우, 클라이언트로 사용자 정보를 반환합니다.
+            res.redirect('/index.ejs');
+        });
+    } catch (error) {
+        // 오류 발생 시 500 상태 코드를 반환합니다.
+        return res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+    }
 };
