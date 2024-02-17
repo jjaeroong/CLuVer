@@ -7,6 +7,7 @@ class Club extends Sequelize.Model{
                 type: Sequelize.INTEGER,
                 allowNull: false,
                 primaryKey: true,
+                autoIncrement: true
               },
               club_name: {
                 type: Sequelize.STRING,
@@ -38,7 +39,9 @@ class Club extends Sequelize.Model{
     }
     
 
-    static associate(db){}
+    static associate(models){
+      this.hasMany(models.Clubuser, {foreignKey: 'club_id' });
+    }
 };
 
 module.exports = Club;

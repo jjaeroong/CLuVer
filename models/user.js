@@ -9,18 +9,19 @@ class User extends Sequelize.Model{
                 type: Sequelize.BIGINT,
                 allowNull: false,
                 primaryKey: true,
+                autoIncrement: true,
               },
               username: {
-                type: Sequelize.TEXT,
-                allowNull: true
+                type: Sequelize.STRING,
+                allowNull: false
               },
               id: {
-                type: Sequelize.BIGINT,
-                allowNull: true
+                type: Sequelize.STRING,
+                allowNull: false
               },
               password: {
-                type: Sequelize.BIGINT,
-                allowNull: true
+                type: Sequelize.STRING,
+                allowNull: false
               },
               birth: {
                 type: Sequelize.DATE,
@@ -28,23 +29,23 @@ class User extends Sequelize.Model{
               },
               email: {
                 type: Sequelize.STRING,
-                allowNull: true
+                allowNull: false
               },
               association: {
                 type: Sequelize.STRING,
-                allowNull: true
+                allowNull: false
               },
               phone: {
-                type: Sequelize.BIGINT,
-                allowNull: true
+                type: Sequelize.STRING,
+                allowNull: false
               },
               cate: {
-                type: Sequelize.BIGINT,
-                allowNull: true
+                type: Sequelize.INTEGER,
+                allowNull: false
               },
               userLog: {
-                type: Sequelize.STRING,
-                allowNull: true
+                type: Sequelize.INTEGER,
+                allowNull: false
               },
         }, {
             sequelize,
@@ -59,7 +60,9 @@ class User extends Sequelize.Model{
     }
 
 
-    static associate(db){}
+    static associate(models){
+      this.hasMany(models.Clubuser, { foreignKey: 'user_id', sourceKey: 'user_id' });
+    }
 };
 
 module.exports = User;

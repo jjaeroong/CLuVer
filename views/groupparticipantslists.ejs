@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>참여자 목록</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./assets/css/tailwind.output.css" />
+  <link rel="stylesheet" href="/css/tailwind.output.css" />
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-  <script src="./assets/js/init-alpine.js"></script>
+  <script src="/js/init-alpine.js"></script>
   <!-- Alpine.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
 
@@ -327,13 +327,9 @@
       <main class="h-full overflow-y-auto">
         <div class="container grid px-12 mx-auto">
           <label class="block mt-4 mb-4 text-sm">
-            <select
+            <select id="clubSelect"
               class="block w-forty mt-4 text-xs dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-              <option disabled selected value="">게시판 선택</option>
-              <option>모임 1</option>
-              <option>🧡🐱 고사모 (고양이를 사랑하는 모임) 🐱🧡</option>
-              <option>모임 2</option>
-              <option>모임 3</option>
+              
             </select>
           </label>
           <h4 class="mb-2 text-sm font-semibold text-gray-600 dark:text-gray-300">
@@ -351,193 +347,20 @@
                     <th class="px-4 py-3">선택</th>
                   </tr>
                 </thead>
-                <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                  <tr class="text-gray-700 dark:text-gray-400">
-                    <td class="px-4 py-3">
-                      <div class="flex items-center justify-center text-sm">
-                        <!-- Avatar with inset shadow -->
-                        <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                          <img class="object-cover w-full h-full rounded-full"
-                            src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
-                            alt="" loading="lazy" />
-                          <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
-                        </div>
-                        <div>
-                          <p class="font-medium">야옹킹</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-center px-4 py-3 text-sm">
-                      모임장
-                    </td>
-                    <td class="text-center px-4 py-3 text-sm">
-                      2020/10/06
-                    </td>
-                    <td class="flex items-center justify-center px-4 py-3">
-                      <div class="flex items-center space-x-4 text-sm">
-                        <label
-                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
-                          <input type="checkbox"
-                            class="text-purple-600 form-checkbox focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                        </label>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="text-gray-700 dark:text-gray-400">
-                    <td class="px-4 py-3">
-                      <div class="flex items-center justify-center text-sm">
-                        <!-- Avatar with inset shadow -->
-                        <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                          <img class="object-cover w-full h-full rounded-full"
-                            src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
-                            alt="" loading="lazy" />
-                          <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
-                        </div>
-                        <div>
-                          <p class="font-medium">야옹퀸</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-center px-4 py-3 text-sm">
-                      소모임장
-                    </td>
-                    <td class="text-center px-4 py-3 text-sm">
-                      2020/10/06
-                    </td>
-                    <td class="flex items-center justify-center px-4 py-3">
-                      <div class="flex items-center space-x-4 text-sm">
-                        <label
-                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
-                          <input type="checkbox"
-                            class="text-purple-600 form-checkbox focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                        </label>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="text-gray-700 dark:text-gray-400">
-                    <td class="px-4 py-3">
-                      <div class="flex items-center justify-center text-sm">
-                        <!-- Avatar with inset shadow -->
-                        <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                          <img class="object-cover w-full h-full rounded-full"
-                            src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
-                            alt="" loading="lazy" />
-                          <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
-                        </div>
-                        <div>
-                          <p class="font-medium">고양이조아</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-center px-4 py-3 text-sm">
-                      소모임장
-                    </td>
-                    <td class="text-center px-4 py-3 text-sm">
-                      2020/10/06
-                    </td>
-                    <td class="flex items-center justify-center px-4 py-3">
-                      <div class="flex items-center space-x-4 text-sm">
-                        <label
-                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
-                          <input type="checkbox"
-                            class="text-purple-600 form-checkbox focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                        </label>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="text-gray-700 dark:text-gray-400">
-                    <td class="px-4 py-3">
-                      <div class="flex items-center justify-center text-sm">
-                        <!-- Avatar with inset shadow -->
-                        <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                          <img class="object-cover w-full h-full rounded-full"
-                            src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
-                            alt="" loading="lazy" />
-                          <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
-                        </div>
-                        <div>
-                          <p class="font-medium">츄르냥이</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-center px-4 py-3 text-sm">
-                      회원
-                    </td>
-                    <td class="text-center px-4 py-3 text-sm">
-                      2020/10/06
-                    </td>
-                    <td class="flex items-center justify-center px-4 py-3">
-                      <div class="flex items-center space-x-4 text-sm">
-                        <label
-                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
-                          <input type="checkbox"
-                            class="text-purple-600 form-checkbox focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                        </label>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="text-gray-700 dark:text-gray-400">
-                    <td class="px-4 py-3">
-                      <div class="flex items-center justify-center text-sm">
-                        <!-- Avatar with inset shadow -->
-                        <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                          <img class="object-cover w-full h-full rounded-full"
-                            src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
-                            alt="" loading="lazy" />
-                          <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
-                        </div>
-                        <div>
-                          <p class="font-medium">우치 선생</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-center px-4 py-3 text-sm">
-                      회원
-                    </td>
-                    <td class="text-center px-4 py-3 text-sm">
-                      2020/10/06
-                    </td>
-                    <td class="flex items-center justify-center px-4 py-3">
-                      <div class="flex items-center space-x-4 text-sm">
-                        <label
-                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
-                          <input type="checkbox"
-                            class="text-purple-600 form-checkbox focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                        </label>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="text-gray-700 dark:text-gray-400">
-                    <td class="px-4 py-3">
-                      <div class="flex items-center justify-center text-sm">
-                        <!-- Avatar with inset shadow -->
-                        <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                          <img class="object-cover w-full h-full rounded-full"
-                            src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
-                            alt="" loading="lazy" />
-                          <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
-                        </div>
-                        <div>
-                          <p class="font-medium">마루네</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-center px-4 py-3 text-sm">
-                      회원
-                    </td>
-                    <td class="text-center px-4 py-3 text-sm">
-                      2020/10/06
-                    </td>
-                    <td class="flex items-center justify-center px-4 py-3">
-                      <div class="flex items-center space-x-4 text-sm">
-                        <label
-                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
-                          <input type="checkbox"
-                            class="text-purple-600 form-checkbox focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
-                        </label>
-                      </div>
-                    </td>
-                  </tr>
+                <tbody id="memberTable" class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                  <template x-for="member in members" :key="member.user_id">
+                    <tr class="flex items-center text-gray-700 dark:text-gray-400">
+                      <td class="text-center px-4 py-3 text-medium" x-text="member.username"></td>
+                      <td class="text-center px-4 py-3 text-sm" x-text="member.cate === 1 ? '모임장' : '일반 회원'"></td>
+                      <td class="text-center px-4 py-3 text-sm" x-text="formatDate(member.joinDate)"></td>
+                      <td class="flex items-center justify-center px-4 py-3">
+                        <button class="text-purple-600 hover:text-purple-900 focus:outline-none"
+                          @click="selectMember(member)">
+                          선택
+                        </button>
+                      </td>
+                    </tr>
+                  </template>
                 </tbody>
               </table>
             </div>
@@ -554,74 +377,178 @@
                 </button>
               </div>
 
-
-              <!-- Pagination -->
-              <span class="flex items-center justify-end ">
-                <nav aria-label="Table navigation">
-                  <ul class="inline-flex items-center">
-                    <li>
-                      <button class="px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple"
-                        aria-label="Previous">
-                        <svg class="w-4 h-4 fill-current" aria-hidden="true" viewBox="0 0 20 20">
-                          <path
-                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                            clip-rule="evenodd" fill-rule="evenodd"></path>
-                        </svg>
-                      </button>
-                    </li>
-                    <li>
-                      <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                        1
-                      </button>
-                    </li>
-                    <li>
-                      <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                        2
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        class="px-3 py-1 text-white transition-colors duration-150 bg-purple-600 border border-r-0 border-purple-600 rounded-md focus:outline-none focus:shadow-outline-purple">
-                        3
-                      </button>
-                    </li>
-                    <li>
-                      <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                        4
-                      </button>
-                    </li>
-                    <li>
-                      <span class="px-3 py-1">...</span>
-                    </li>
-                    <li>
-                      <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                        8
-                      </button>
-                    </li>
-                    <li>
-                      <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">
-                        9
-                      </button>
-                    </li>
-                    <li>
-                      <button class="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple"
-                        aria-label="Next">
-                        <svg class="w-4 h-4 fill-current" aria-hidden="true" viewBox="0 0 20 20">
-                          <path
-                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                            clip-rule="evenodd" fill-rule="evenodd"></path>
-                        </svg>
-                      </button>
-                    </li>
-                  </ul>
-                </nav>
-              </span>
+              <div x-data="{ currentPage : 1 }">
+                <span class="flex items-center justify-end">
+                  <nav aria-label="Table navigation">
+                    <ul class="inline-flex items-center">
+                      <li>
+                        <button class="px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple"
+                          aria-label="Previous" @click="prevPage" >
+                          <svg class="w-4 h-4 fill-current" aria-hidden="true" viewBox="0 0 20 20">
+                            <path
+                              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                              clip-rule="evenodd" fill-rule="evenodd"></path>
+                          </svg>
+                        </button>
+                      </li>
+                      <li>
+                        <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple" id="currentPageButton"></button>
+                      </li>
+                      <li>
+                        <button class="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple"
+                          aria-label="Next" @click="nextPage" >
+                          <svg class="w-4 h-4 fill-current" aria-hidden="true" viewBox="0 0 20 20">
+                            <path
+                              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                              clip-rule="evenodd" fill-rule="evenodd"></path>
+                          </svg>
+                        </button>
+                      </li>
+                    </ul>
+                  </nav>
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </main>
     </div>
   </div>
+  <script>
+    let clubs = [];
+    let members = [];
+    let itemsPerPage = 6;
+    let currentPage = 1;
+    let totalPages = 1;
+
+    async function fetchClubs() {
+      try {
+        const response = await fetch('/user/clubs');
+        clubs = await response.json();
+        populateClubSelect();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    function populateClubSelect() {
+      const clubSelect = document.getElementById('clubSelect');
+      const defaultOption = document.createElement('option');
+      defaultOption.text = '모임 선택';
+      defaultOption.disabled = true;
+      defaultOption.selected = true;
+      clubSelect.add(defaultOption);
+
+      clubs.forEach(club => {
+        const option = document.createElement('option');
+        option.text = club.club_name;
+        option.value = club.club_id;
+        clubSelect.add(option);
+      });
+
+      clubSelect.addEventListener('change', fetchMembers);
+    }
+
+    async function fetchMembers() {
+      const clubId = document.getElementById('clubSelect').value;
+      try {
+        const response = await fetch(`/clubs/${clubId}/members`);
+        members = await response.json(); // members 변수에 할당
+        currentPage = 1;
+        totalPages = Math.ceil(members.length / itemsPerPage);
+        populateMemberTable(members);
+      } catch (error) {
+        console.error(error);
+        return [];
+      }
+    }
+
+
+    function formatDate(date) {
+      // 예시: YYYY년 MM월 DD일
+      const formattedDate = new Date(date).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+      return formattedDate;
+    }
+
+    function selectMember(member) {
+      // 선택된 멤버의 정보를 콘솔에 출력
+      console.log('선택된 멤버:', member);
+    }
+
+    // 모임 선택 셀렉트 박스
+    const clubSelect = document.getElementById('clubSelect');
+
+    let selectedMember = null;
+    function selectMember(member) {
+      selectedMember = member;
+      console.log('선택된 유저:', member);
+    }
+
+    function populateMemberTable() {
+      const memberTable = document.getElementById('memberTable');
+      memberTable.innerHTML = ''; // 테이블 비우기
+
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, members.length);
+      const currentPageMembers = members.slice(startIndex, endIndex);
+
+      currentPageMembers.forEach(member => {
+        const row = document.createElement('tr');
+
+        const profileCell = document.createElement('td');
+        profileCell.textContent = member.User.username; // member 객체의 User 속성으로 변경
+        profileCell.classList.add('text-center', 'px-4', 'py-3', 'font-medium');
+        row.appendChild(profileCell);
+
+        const roleCell = document.createElement('td');
+        roleCell.textContent = member.cate === 1 ? '모임장' : '회원';
+        roleCell.classList.add('text-center', 'px-4', 'py-3', 'font-sm');
+        row.appendChild(roleCell);
+
+        const joinDateCell = document.createElement('td');
+        joinDateCell.textContent = formatDate(member.joinDate);
+        joinDateCell.classList.add('text-center', 'px-4', 'py-3', 'font-sm');
+        row.appendChild(joinDateCell);
+
+        const selectCell = document.createElement('td');
+        selectCell.classList.add('flex','items-center','justify-center','px-4','py-4');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.classList.add('form-check','text-purple-600', 'hover:text-purple-900', 'focus:outline-none');
+        checkbox.addEventListener('change', () => {
+          if (checkbox.checked) {
+            selectMember(member)
+          } else {
+            selectedMember = null;
+          }
+        });
+        selectCell.appendChild(checkbox);
+        row.appendChild(selectCell);
+
+        memberTable.appendChild(row);
+        
+      });
+      document.getElementById('currentPageButton').textContent = currentPage;
+    }
+
+    function nextPage() {
+      if (currentPage < totalPages) {
+        currentPage++;
+        populateMemberTable();
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        populateMemberTable();
+      }
+    }
+
+    window.onload = async function () {
+      await fetchClubs(); // 클럽 목록을 가져오는 함수 호출
+    }
+  </script>
 </body>
 
 </html>
