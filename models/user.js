@@ -59,7 +59,6 @@ class User extends Sequelize.Model{
         });
     }
 
-
     static associate(models){
       this.hasMany(models.Clubuser, { foreignKey: 'user_id', sourceKey: 'user_id' });
     }
