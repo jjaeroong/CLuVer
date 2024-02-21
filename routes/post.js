@@ -3,7 +3,7 @@ const passport = require('passport');
 const router = express.Router();
 const { Post } = require("../models");
 const {insertPost}=require('../Controllers/post')
-const authMiddleware = require("../Middleware/auth");
+//const authMiddleware = require("../Middleware/auth");
 const postController = require('../Controllers/post');
 
 router.post('/board/post', postController.createPost);
