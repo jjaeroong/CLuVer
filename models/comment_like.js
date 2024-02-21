@@ -43,4 +43,4 @@ class Comment_like extends Sequelize.Model{
     static associate(db){}
 };
 
-module.exports = User;
+module.exports = Comment_like;

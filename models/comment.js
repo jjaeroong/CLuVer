@@ -59,4 +59,4 @@ class Comment extends Sequelize.Model{
     static associate(db){}
 };
 
-module.exports = User;
+module.exports = Comment;
