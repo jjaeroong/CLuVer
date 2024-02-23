@@ -163,8 +163,13 @@ app.get('/schedule', (req, res) => {
   scheduleRouter
 })
 
+app.post('/', (req, res) => {
+  console.log(req.body)
+  scheduleRouter
+
+})
 app.use("/mainpage", scheduleRouter); 
-app.use("/schedule/create", scheduleRouter); 
+
 app.use("/posts", postRouter);
 
 app.use('/',subclubuserRouter)

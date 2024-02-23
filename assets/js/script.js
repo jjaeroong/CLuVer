@@ -127,6 +127,8 @@ document.addEventListener("DOMContentLoaded", function () {
         calendarBody.style.display = 'none';
 
         backButton.style.display = 'block';
+        
+        const eventDate = new Date(currentYear.value, currentMonth.value, parseInt(target.innerText));
 
         const clickedDateInfo = document.createElement('div');
         const monthIndex = currentMonth.value + 1; // 월의 숫자를 가져와서 1을 더해줌
@@ -136,22 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const newDiv = document.createElement('div');
         newDiv.innerHTML = `
-            <div class="block p-3 dark:bg-gray-700 dark:text-gray-200 flex"">
-                <div class="circle inline-block ml-2 mr-2 mt-2"></div>
-                <div class="block">
-                    <span class="inline-block text-sm font-medium ml-1">SWUWEB 전체 대면 회의</span>
-                    <p class="text-xs text-gray-500 mt-1 ml-1">제2과학관 302호</p>
-                    <p class="text-xs text-gray-500 mt-1 ml-1">18:00</p>
-                </div>
-            </div>
-            <div class="block p-3 dark:bg-gray-700 dark:text-gray-200 flex"">
-                <div class="circle inline-block ml-2 mr-2 mt-2"></div>
-                <div class="block"> 
-                    <span class="inline-block text-sm font-medium ml-1">SWUWEB 전체 대면 회의</span>
-                    <p class="text-xs text-gray-500 mt-1 ml-1">제2과학관 302호</p>
-                    <p class="text-xs text-gray-500 mt-1 ml-1">18:00</p>
-                </div>
-            </div>
+           
         `;
         newDiv.classList.add('newDiv', 'my-2', 'px-2'); // 필요한 스타일 클래스 추가
 
@@ -195,22 +182,26 @@ document.addEventListener("DOMContentLoaded", function () {
         const clickedDateInfo = document.querySelector('.clicked-date-info');
         const clickedDate = clickedDateInfo.textContent.trim();
         const [clickedYear, clickedMonth, clickedDay] = clickedDate.split('.'); // 클릭한 날짜에서 연도, 월, 일 추출
-        
+      
+
         const popupHTML = `
-            <div class="fixed inset-0 z-30 bg-black bg-opacity-50 flex items-center justify-center">
-                <div class="bg-white w-196 p-6 rounded-lg relative">
-                    <button class="absolute top-0 right-0 mt-2 mr-2 text-gray-600 hover:text-gray-800" id="close-popup">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
+
+        <div class="fixed inset-0 z-30 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white w-196 p-6 rounded-lg relative">
+                <button class="absolute top-0 right-0 mt-2 mr-2 text-gray-600 hover:text-gray-800" id="close-popup">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+      
                     <div class="mb-2 flex flex-col text-center">
                         <span class="font-medium px-24 mt-2 mb-1">일정 추가</span>
                         <div id="clicked-date-info" class="mb-2 text-xs text-gray-500">
                             ${clickedYear}.${clickedMonth}.${clickedDay}
                         </div>
+                
                         <div class="mb--2 flex justify-end relative">
-                            <select id="clubselect" class="block w-thrity text-xxs dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+                            <select id="clubselect" name="clubselect" class="block w-thrity text-xxs dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
                                 <option disabled selected value="">게시판 선택</option>
                                 <option>SWUWEB</option>
                                 <option>View</option>
@@ -218,21 +209,27 @@ document.addEventListener("DOMContentLoaded", function () {
                                 <option>Controller</option>
                             </select>
                         </div>
-                        <span class="text-xxs ml-1 text-left">일정명</span>
-                        <input id="schname" class="block mt-2 mb-2 text-xxs text-black form-input" style="min-width: 350px;" />
-                        <span class="text-xxs ml-1 text-left">일정 내용</span>
-                        <input id="schcontent" class="block mt-2 mb-2 text-xxs text-black form-input" style="min-width: 350px;" />
-                        <span class="text-xxs ml-1 text-left">일정 시각</span>
-                        <input id="eventtime" class="block mt-2 mb-2 text-xxs text-black form-input" style="min-width: 350px;" />
-                        <div class="mt-4 mb-4 flex items-center justify-center">
-                            <button id="add-event" class="px-4 py-2 text-xs font-semibold leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                                추가
-                            </button>
-                        </div>
-                    </div>
+                     
+                            <span class="text-xxs ml-1 text-left">일정명</span>
+                            <input id="event-name" name="schname" class="block mt-2 mb-2 text-xxs text-black form-input" style="min-width: 350px;" />
+                            <span class="text-xxs ml-1 text-left">일정 장소</span>
+                            <input id="event-location" name="schcontent" class="block mt-2 mb-2 text-xxs text-black form-input" style="min-width: 350px;" />
+                            <span class="text-xxs ml-1 text-left">일정 시각</span>
+                            <input id="event-time" name="eventtime" class="block mt-2 mb-2 text-xxs text-black form-input" style="min-width: 350px;" />
+                            <div class="mt-4 mb-4 flex items-center justify-center">
+                        
+                                <button id="add-event" type="submit" class="px-4 py-2 text-xs font-semibold leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                                    추가
+                                </button>
+                        
+                            </div>
+                        
+             
                 </div>
             </div>
-        `;
+        </div>
+
+    `
         // 팝업을 DOM에 추가
         document.body.insertAdjacentHTML('beforeend', popupHTML);
 
@@ -240,34 +237,35 @@ document.addEventListener("DOMContentLoaded", function () {
         const selectElement = document.getElementById('clubselect');
         const response = await fetch('mainpage/view'); // 적절한 엔드포인트로 변경해주세요
         const data = await response.json();
-        const selectedIndex = selectElement.selectedIndex;
-        const selectedOption = selectElement.options[selectedIndex];
-        const selectedValue = selectedOption.value;
+
         console.log(selectElement)
+
         // select 요소에 동적으로 옵션 추가
         selectElement.innerHTML = ''; // 기존 옵션 초기화
         selectElement.insertAdjacentHTML('beforeend', '<option disabled selected value="">게시판 선택</option>');
-      
-        data.user_subclubs.forEach(subclubName => {
+
+    // 소모임 옵션 추가
+        data.user_subclubs.forEach(subclub => {
             const option = document.createElement('option');
-            option.textContent = subclubName.name;
-            option.value =subclubName.id;
+            option.textContent = subclub.name; // 소모임 이름
+            option.value = `subclub_${subclub.id}`; // subclub_id를 value로 설정
+            console.log(option.value)
             selectElement.appendChild(option);
         });
 
-        data.user_clubs.forEach(clubName => {
+        // 클럽 옵션 추가
+        data.user_clubs.forEach(club => {
             const option = document.createElement('option');
-            option.textContent = clubName.name;
-            option.value =clubName.id;
+            option.textContent = club.name; // 클럽 이름 
+            option.value = `club_${club.id}`; // club_id를 value로 설정
             selectElement.appendChild(option);
         });
         
-    
-        // 팝업을 calendarFooter 요소의 자식으로 추가
-        calendarFooter.insertAdjacentHTML('beforeend', popupHTML);
+      
+
 
         // 현재 팝업 설정
-        currentPopup = calendarFooter.lastElementChild;
+        currentPopup = document.body.lastElementChild;
 
         // 팝업 닫기 버튼 이벤트 처리
         const closeButton = currentPopup.querySelector('#close-popup');
@@ -278,32 +276,76 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // 추가 버튼 이벤트 처리
         const addEvent = currentPopup.querySelector('#add-event');
-        addEvent.addEventListener('click', function () {
+        addEvent.addEventListener('click', async function () {
+            
+            const selectedIndex = selectElement.selectedIndex;
+            const selectedOption = selectElement.options[selectedIndex];
+            const selectedValue = selectedOption.value;
+          
+            const eventDate = new Date(clickedYear, clickedMonth-1, clickedDay);
+
+            const eventDateUTC = new Date(eventDate.getTime() + eventDate.getTimezoneOffset() * 60000);
+            eventDateUTC.setDate(eventDateUTC.getDate() + 1); 
+           
             const eventName = document.querySelector('#event-name').value;
             const eventLocation = document.querySelector('#event-location').value;
-            const eventTime = document.querySelector('#event-time').value;
+            const eventtime = document.querySelector('#event-time').value;
+        
+            let subclub_id, club_id;
+        
+            if (selectedValue.startsWith('subclub_')) {
+                subclub_id = selectedValue.substring(8);
+            }
+            if (selectedValue.startsWith('club_')) {
+                club_id = selectedValue.substring(5);
+            }
+        
+            // 서버로 일정 정보 전송
+            const response = await fetch('mainpage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    schname: eventName,
+                    schcontent: eventLocation,
+                    eventtime: eventtime,
+                    sub_id: subclub_id,
+                    club_id: club_id,
+                    eventDate:  eventDateUTC.toISOString() // 날짜 객체를 ISO 형식의 문자열로 변환하여 서버로 전달합니다.
+                })
+            });
+      
+        
+         
 
-            // 추가할 일정 요소 생성
-            const eventElement = document.createElement('div');
-            eventElement.classList.add('block', 'p-3', 'dark:bg-gray-700', 'dark:text-gray-200', 'flex');
-            eventElement.innerHTML = `
-                <div class="circle inline-block ml-2 mr-2 mt-2"></div>
-                <div class="block"> 
-                    <span class="inline-block text-sm font-medium ml-1">${eventName}</span>
-                    <p class="text-xs text-gray-500 mt-1 ml-1">${eventLocation}</p>
-                    <p class="text-xs text-gray-500 mt-1 ml-1">${eventTime}</p>
-                </div>
-            `;
+            
+           
+                // 추가할 일정 요소 생성
+                const eventElement = document.createElement('div');
+                eventElement.classList.add('block', 'p-3', 'dark:bg-gray-700', 'dark:text-gray-200', 'flex');
+                eventElement.innerHTML = `
+                    <div class="circle inline-block ml-2 mr-2 mt-2"></div>
+                    <div class="block"> 
+                        <span class="inline-block text-sm font-medium ml-1">${eventName}</span>
+                        <p class="text-xs text-gray-500 mt-1 ml-1">${eventLocation}</p>
+                        <p class="text-xs text-gray-500 mt-1 ml-1">${eventtime}</p>
+                    
+                    </div>
+                `;
 
             // 클릭한 날짜에 일정 추가
             const newDiv = document.querySelector('.newDiv');
             newDiv.appendChild(eventElement);
+            
+    
+          
 
             // 팝업 닫기
             currentPopup.parentNode.removeChild(currentPopup);
             currentPopup = null;
         });
-
+        document.body.appendChild(currentPopup);
     });
-
+ 
 });

@@ -3,29 +3,33 @@ const { Schedule, SubclubUser,Club,Subclub,Clubuser} = require('../models');
 exports.createSchedule = async (req, res) => {
   try {
     const user_id = req.session.user.id;
-    const { schname, schcontent, eventtime } = req.body;
+    const { schname, schcontent, eventtime,sub_id,eventDate,club_id } = req.body;
 
     // Clubuser를 통해 사용자가 속한 클럽의 ID 가져오기
   
 
 
 
-    const club_id = req.body.club_id;
-    const sub_id = req.body.sub_id;
-
+ 
+   
+    console.log('전송된 eventDate:', eventDate);
+    console.log(club_id,sub_id)
     // Schedule 모델을 사용하여 일정 생성
     const newSchedule = await Schedule.create({
       user_id: user_id,
-      club_id: club_id,
-      sub_id:  sub_id,
+      club_id,
+      sub_id,
       schname,
       schcontent,
-      eventtime,
+      eventDate,
+      eventtime
+      
+     
     });
         // sub_cate가 0이면 현재 사용자가 속한 소모임 정보를 가져옴
-       
+  
     // 클라이언트에게 응답을 보냄
-    res.status(201).json({ message: '일정이 성공적으로 등록되었습니다.', schedule: newSchedule,user_clubs ,user_subclubs});
+    res.status(201).json({ message: '일정이 성공적으로 등록되었습니다.', schedule: newSchedule});
   } catch (error) {
     console.error('에러 발생:', error);
     res.status(500).json({ error: '일정을 등록하는 중에 오류가 발생했습니다.' });
