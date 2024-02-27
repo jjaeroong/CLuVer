@@ -9,16 +9,19 @@ class Subclubuser extends Sequelize.Model{
                 primaryKey: true,
               },
               club_id: {
-                type: Sequelize.INTEGER,
-                allowNull: true
+                type: Sequelize.BIGINT,
+                allowNull: false,
+                primaryKey: true,
               },
               sub_id: {
-                type: Sequelize.INTEGER,
-                allowNull: true
+                type: Sequelize.BIGINT,
+                allowNull: false,
+                primaryKey: true,
+
               },
               joinDate: {
                 type: Sequelize.DATE,
-                allowNull: true
+                allowNull: tfalse
               },
               cate: {
                 type: Sequelize.INTEGER,

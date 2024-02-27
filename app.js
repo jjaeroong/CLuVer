@@ -18,6 +18,7 @@ const Club = require('./models/club');
 const Clubuser = require('./models/clubuser');
 
 
+
   // 세션 사용
 app.use(
   session({

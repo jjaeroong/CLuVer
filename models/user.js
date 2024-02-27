@@ -40,7 +40,7 @@ class User extends Sequelize.Model{
                 allowNull: false
               },
               cate: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.BOOLEAN,
                 allowNull: false
               },
               userLog: {

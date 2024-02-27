@@ -4,22 +4,22 @@ class Club extends Sequelize.Model{
     static init(sequelize){
         super.init({
             club_id: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.BIGINT,
                 allowNull: false,
                 primaryKey: true,
                 autoIncrement: true
               },
               club_name: {
                 type: Sequelize.STRING,
-                allowNull: true
+                allowNull: false
               },
               comment: {
                 type: Sequelize.TEXT,
-                allowNull: true
+                allowNull: false
               },
               color: {
-                type: Sequelize.INTEGER,
-                allowNull: true
+                type: Sequelize.STRING,
+                allowNull: false
               },
               clubLog: {
                 type: Sequelize.INTEGER,

@@ -1,4 +1,4 @@
-/*const Post = require('../models/post');
+const Post = require('../models/post');
 
 exports.createPost = async (req, res) => {
   try {
@@ -29,9 +29,8 @@ exports.getPosts = async (req, res) => {
     console.error(error);
     return res.status(500).json({ message: '게시글 조회 중 에러가 발생했습니다.' });
   }
-};*/
+};
 
-const Post = require('../models/post');
 const Club = require('../models/club');
 const SubClub = require('../models/subclub');
 
@@ -66,5 +65,20 @@ exports.getPostsBySubclub = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: '서브클럽 게시글 조회 중 에러가 발생했습니다.' });
+  }
+};
+
+//게시글 수정
+exports.getPostForEdit = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    // 선택한 글의 데이터 조회
+    const post = await Post.findByPk(postId);
+
+    // 해당 데이터를 가지고 수정 페이지 렌더링
+    res.render('board_write', { post });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: '게시글 수정을 위한 데이터 조회 중 에러가 발생했습니다.' });
   }
 };
