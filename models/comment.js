@@ -12,15 +12,15 @@ class Comment extends Sequelize.Model{
               },
               comment_content: {
                 type: Sequelize.TEXT,
-                allowNull: true
+                allowNull: false
               },
               is_delete: {
                 type: Sequelize.BOOLEAN,
-                allowNull: true
+                allowNull: false
               },
-              comment_st: {
+              comment_createAt: {
                 type: Sequelize.DATE,
-                allowNull: true
+                allowNull: false
               },
               comment_like: {
                 type: Sequelize.BIGINT,
@@ -28,20 +28,22 @@ class Comment extends Sequelize.Model{
               },
               post_id: {
                 type: Sequelize.BIGINT,
-                allowNull: true
+                allowNull: false
               },
               user_id: {
                 type: Sequelize.BIGINT,
-                allowNull: true
+                allowNull: false
               },
               club_id: {
-                type: Sequelize.INTEGER,
-                allowNull: true
+                type: Sequelize.BIGINT,
+                allowNull: false
               },
               sub_id: {
-                type: Sequelize.INTEGER,
-                allowNull: true
+                type: Sequelize.BIGINT,
+                allowNull: false
               },
+              comment_like: Sequelize.BIGINT,
+              allowNull: false
             
         }, {
             sequelize,

@@ -8,18 +8,19 @@ class Post extends Sequelize.Model{
                 type: Sequelize.BIGINT,
                 allowNull: false,
                 primaryKey: true,
+                autoIncrement: true
               },
               post_title: {
                 type: Sequelize.STRING,
-                allowNull: true
+                allowNull: false
               },
               post_content: {
                 type: Sequelize.TEXT,
-                allowNull: true
+                allowNull: false
               },
               post_hits: {
                 type: Sequelize.BIGINT,
-                allowNull: true
+                allowNull: false
               },
               post_like_number: {
                 type: Sequelize.BIGINT,
@@ -27,7 +28,7 @@ class Post extends Sequelize.Model{
               },
               post_create_at: {
                 type: Sequelize.DATE,
-                allowNull: true
+                allowNull: false
               },
               post_modified_at: {
                 type: Sequelize.DATE,
@@ -35,24 +36,28 @@ class Post extends Sequelize.Model{
               },
               post_cate: {
                 type: Sequelize.BOOLEAN,
-                allowNull: true
+                allowNull: false
               },
               postLog: {
                 type: Sequelize.INTEGER,
-                allowNull: true
+                allowNull: false
               },
               user_id: {
                 type: Sequelize.BIGINT,
-                allowNull: true
+                allowNull: false
               },
               club_id: {
-                type: Sequelize.INTEGER,
-                allowNull: true
+                type: Sequelize.BIGINT,
+                allowNull: false
               },
               sub_id: {
-                type: Sequelize.INTEGER,
-                allowNull: true
+                type: Sequelize.BIGINT,
+                allowNull: false
               },
+              like_number: {
+                type: Sequelize.BIGINT,
+                allowNull: false
+              }
         }, {
             sequelize,
             timestamps: false,

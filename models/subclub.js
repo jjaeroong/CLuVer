@@ -1,26 +1,25 @@
-//user.js
-
 const Sequelize = require('sequelize');
 
 class Subclub extends Sequelize.Model{
     static init(sequelize){
         return super.init({
             sub_id: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.BIGINT,
                 allowNull: false,
                 primaryKey: true,
+                autoIncrement: true
               },
               subname: {
                 type: Sequelize.STRING,
-                allowNull: true
+                allowNull: false
               },
               subcontent: {
                 type: Sequelize.TEXT,
-                allowNull: true
+                allowNull: false
               },
               club_id: {
                 type: Sequelize.INTEGER,
-                allowNull: true
+                allowNull: false
               },
               
         }, {

@@ -12,15 +12,15 @@ class Schedule extends Sequelize.Model{
               },
               user_id: {
                 type: Sequelize.BIGINT,
-                allowNull: true
+                allowNull: false
               },
               club_id: {
-                type: Sequelize.INTEGER,
-                allowNull: true
+                type: Sequelize.BIGINT,
+                allowNull: false
               },
               sub_id: {
-                type: Sequelize.INTEGER,
-                allowNull: true
+                type: Sequelize.BIGINT,
+                allowNull: false
               },
               schname: {
                 type: Sequelize.STRING,

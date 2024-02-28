@@ -5,21 +5,21 @@ class Clubuser extends Sequelize.Model {
   static init(sequelize) {
     super.init({
       user_id: {
-        type: Sequelize.STRING,
+        type: Sequelize.BIGINT,
         allowNull: false,
         primaryKey: true,
       },
       club_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
+        type: Sequelize.BIGINT,
+        allowNull: false,
         primaryKey: true,
       },
       joinDate: {
         type: Sequelize.DATE,
-        allowNull: true
+        allowNull: false
       },
       cate: {
-        type: Sequelize.BIGINT,
+        type: Sequelize.INT,
         allowNull: true
       },
     }, {
