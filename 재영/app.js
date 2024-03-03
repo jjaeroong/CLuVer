@@ -9,13 +9,14 @@ const SubClublistROuter = require("./routes/SubClublist");
 const passport = require('passport');
 const subclubuserRouter = require('./routes/subclubuser');
 const scheduleRouter = require('./routes/schedule');
-const signUpRouter = require("./routes/signup");
-const clubRouter = require('./routes/club');
 const app = express();
+const { authMiddleware } = require("./Middleware/auth");
 const cors = require("cors");
 const session = require("express-session");
-const Club = require('./models/club');
-const Clubuser = require('./models/clubuser');
+
+
+
+
 
 
   // 세션 사용
@@ -28,6 +29,11 @@ app.use(
 );
 
 app.use(bodyParser.json());
+app.use(passport.initialize());
+app.use(passport.session());
+
+// 라우트 등록
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -46,8 +52,6 @@ app.use(passport.initialize());
 app.set('port',process.env.PORT||3000);
 app.set('view engine', 'ejs');
 app.set('views', './views');
-
-
 app.use(express.static('assets',{
   setHeaders:(res,path,stat)=>{
     if(path.endsWith('.css')){
@@ -73,72 +77,26 @@ app.use(
   cors({
     origin: [
       "http://127.0.0.1:3306",
+      
+      
+     
       ],
       credentials: true,
     })
   );
 
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.serializeUser((user, callback) => {
-  callback(null, user);
-});
-
-passport.deserializeUser((obj, callback) => {
-  callback(null, obj);
-});
-
-app.get('/login.ejs', (req, res) => {
-  console.log("테스트 페이지!");
-  res.render('login'); // Assuming "login.ejs" is in the views directory
-});
-app.use("/login", loginRouter);
-app.get('/create-account', (req, res) => {
-  console.log("테스트 페이지!");
-  res.render('create-account'); // Assuming "create-account.ejs" is in the views directory
-});
-app.use("/create-account", signUpRouter);
-
-function loginRequired(req, res, next) {
-  // 미 로그인
-  if (!req.user) {
-      res.redirect('/login.ejs');
-      return;
-  }
-  next();
-}
-
-app.get("/groupparticipantslists.ejs", loginRequired, (req, res) => {
-  console.log("테스트 페이지!");
-  res.render("groupparticipantslists", {}); // Assuming "groupmanagerslist.ejs" is in the views directory
-});
+  
 
 app.get('/board/post', (req, res) => {
   res.render('post');
 });
 
-app.get('/user/clubs', loginRequired, async (req, res) => {
-  try {
-      const userId = req.user.user_id;
-      // 사용자가 속한 모임을 데이터베이스에서 쿼리하여 가져오기
-      const userClubs = await Club.findAll({
-          include: [{
-              model: Clubuser,
-              where: { user_id: userId }
-          }]
-      });
-      res.json(userClubs);
-  } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
-  }
-});
-app.use('/clubs', clubRouter);
+// app.use(authMiddleware);
 
-app.use('/clubs/:clubId/members', clubRouter);
+app.get('/login', (req, res) => {
 
-
+  res.render('login2');
+})
 app.get('/', async (req, res) => {
 
   subclubuserRouter
@@ -154,8 +112,14 @@ app.get('/mainpage', (req, res) => {
 
   res.render('index');
 })
-app.get('/', (req, res) => {
- 
+
+
+app.get('/mypage/writelist', (req, res) => {
+  
+  res.render('mypage-writelists');
+})
+app.post('/', (req, res) => {
+  console.log(req.body)
   scheduleRouter
 
 })
@@ -163,12 +127,9 @@ app.get('/schedule', (req, res) => {
   scheduleRouter
 })
 
-app.post('/', (req, res) => {
-  console.log(req.body)
-  scheduleRouter
-
-})
+app.use("/", loginRouter); 
 app.use("/mainpage", scheduleRouter); 
+
 
 app.use("/posts", postRouter);
 

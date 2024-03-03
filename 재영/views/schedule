@@ -1,0 +1,46 @@
+<div class="fixed inset-0 z-30 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white w-196 p-6 rounded-lg relative">
+        <button class="absolute top-0 right-0 mt-2 mr-2 text-gray-600 hover:text-gray-800" id="close-popup">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+        <div class="mb-2 flex flex-col text-center">
+            <span class="font-medium px-24 mt-2 mb-1">일정 추가</span>
+            <!-- clickedYear, clickedMonth, clickedDay에 해당하는 날짜 정보 표시 -->
+            <div id="clicked-date-info" class="mb-2 text-xs text-gray-500">
+                <%= clickedYear %>.<%= clickedMonth %>.<%= clickedDay %>
+            </div>
+            <div class=" mb--2 flex justify-end relative">
+                <!-- 일정 등록에 필요한 폼 -->
+                <form action="/create-schedule" method="POST">
+                    <select name="sub_cate" class="block w-thrity text-xxs dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+                        <option disabled selected value="">게시판 선택</option>
+                        <% if (sub_cate === 0) { %>
+                            <% user_subclubs.forEach(subclub => { %>
+                                <!-- 현재 사용자가 속한 소모임 정보로 옵션 표시 -->
+                                <option><%= subclub.subclubname %></option>
+                            <% }); %>
+                        <% } else if (club_cate === 0) { %>
+                            <% user_clubs.forEach(club => { %>
+                                <!-- 현재 사용자가 속한 모임 정보로 옵션 표시 -->
+                                <option><%= club.club_name %></option>
+                            <% }); %>
+                        <% } %>
+                    </select>
+                    <span class="text-xxs ml-1 text-left">일정명</span>
+                    <input name="schname" class="block mt-2 mb-2 text-xxs text-black form-input" style="min-width: 350px;" />
+                    <span class="text-xxs ml-1 text-left">일정 위치</span>
+                    <input name="schcontent" class="block mt-2 mb-2 text-xxs text-black form-input" style="min-width: 350px;" />
+                    <span class="text-xxs ml-1 text-left">일정 시각</span>
+                    <input name="eventtime" class="block mt-2 mb-2 text-xxs text-black form-input" style="min-width: 350px;" />
+                    <div class="mt-4 mb-4 flex items-center justify-center">
+                        <button type="submit" class="px-4 py-2 text-xs font-semibold leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                            추가
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

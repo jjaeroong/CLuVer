@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>소모임 목록</title>
+</head>
+<body>
+    <h1><%= user %>님의 소모임 목록</h1>
+
+    <h2>참여 중인 소모임</h2>
+    <ul>
+        <% subclubList.forEach(subclub => { %>
+            <li><%= subclub.Subclub.subclubname %></li>
+        <% }) %>
+    </ul>
+
+    <h2>전체 소모임</h2>
+    <ul>
+        <% Allsubclublist.forEach(subclub => { %>
+            <li><%= subclub.subclubname %></li>
+        <% }) %>
+    </ul>
+
+    <a href="/">홈으로 돌아가기</a>
+</body>
+</html>

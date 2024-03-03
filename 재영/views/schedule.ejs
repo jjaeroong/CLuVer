@@ -1,0 +1,29 @@
+<!-- createSchedule.ejs -->
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>일정 등록</title>
+</head>
+<body>
+    <h1>일정 등록</h1>
+    <form action="/schedule/create" method="POST">
+    
+
+        <label for="schname">일정 제목:</label>
+        <input type="text" id="schname" name="schname" required><br>
+
+        <label for="schcontent">일정 내용:</label>
+        <textarea id="schcontent" name="schcontent"></textarea><br>
+
+        <label for="stattime">시작 시간:</label>
+        <input type="datetime-local" id="stattime" name="eventtime" required><br>
+
+       
+
+        <button type="submit">일정 등록</button>
+    </form>
+</body>
+</html>
