@@ -19,4 +19,7 @@ router.get('/subclubs/:subClubId/posts', postController.getPostsBySubclub);
 // 수정 버튼 클릭 시 해당 기능 실행
 router.get('/edit/:postId', boardController.getPostForEdit);
 
+router.post('/createComment', postController.createComment);
+
+
 module.exports = router;
