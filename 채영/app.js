@@ -1,85 +1,58 @@
 const express = require("express");
-const { sequelize } = require("./models");
-
+const session = require("express-session");
 const bodyParser = require('body-parser');
-const postRouter = require("./routes/post");
 const loginRouter = require("./routes/login");
-const SubClublistROuter = require("./routes/SubClublist");
-// const authMiddleware = require("./middleware"); 이걸쓰게 되면 모든 과정에서 로그인검사를 하기에 문제발생함
-const passport = require('passport');
-const subclubuserRouter = require('./routes/subclubuser');
-const scheduleRouter = require('./routes/schedule');
 const signUpRouter = require("./routes/signup");
 const clubRouter = require('./routes/club');
-const app = express();
-const cors = require("cors");
-const session = require("express-session");
+const scheduleRouter = require('./routes/schedule');
+const userRouter = require('./routes/user');
+const { sequelize } = require("./models");
+const passport = require('passport');
 const Club = require('./models/club');
 const Clubuser = require('./models/clubuser');
 
-
-  // 세션 사용
-app.use(
-  session({
-    secret: '1234',
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+const app = express();
+const cors = require("cors");
 
 app.use(bodyParser.json());
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-
-
-// 라우트 등록
-
-app.use(bodyParser.json());
-app.use(passport.initialize());
-
-// 라우트 등록
-
-
-
-app.set('port',process.env.PORT||3000);
+app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-
-app.use(express.static('assets',{
-  setHeaders:(res,path,stat)=>{
-    if(path.endsWith('.css')){
-       res.setHeader('Content-Type','text/css')
-
+app.use(express.static('assets', {
+    setHeaders: (res, path, stat) => {
+        if (path.endsWith('.css')) {
+            res.setHeader('Content-Type', 'text/css');
+        }
+        if (path.endsWith('.js')) {
+            res.setHeader('Content-Type', 'application/javascript');
+        }
     }
-    if(path.endsWith('.js')){
-      res.setHeader('Content-Type','application/javascript');
-    }
-  }
 }));
 
-sequelize.sync({force:false})
-  .then(()=>{
-    console.log('데이터베이스 연결 성공');
-
-  })
-  .catch((err)=>{
-    console.error(err);
-  });
+app.use(
+    cors({
+        origin: [
+            "http://127.0.0.1:3306",
+        ],
+        credentials: true,
+    })
+);
 
 app.use(
-  cors({
-    origin: [
-      "http://127.0.0.1:3306",
-      ],
-      credentials: true,
+    session({
+        secret: '1234',
+        resave: false,
+        saveUninitialized: true,
     })
-  );
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 passport.serializeUser((user, callback) => {
   callback(null, user);
@@ -89,16 +62,22 @@ passport.deserializeUser((obj, callback) => {
   callback(null, obj);
 });
 
+// Routes
 app.get('/login.ejs', (req, res) => {
-  console.log("테스트 페이지!");
-  res.render('login'); // Assuming "login.ejs" is in the views directory
+    console.log("테스트 페이지!");
+    res.render('login'); // Assuming "login.ejs" is in the views directory
 });
 app.use("/login", loginRouter);
 app.get('/create-account', (req, res) => {
-  console.log("테스트 페이지!");
-  res.render('create-account'); // Assuming "create-account.ejs" is in the views directory
+    console.log("테스트 페이지!");
+    res.render('create-account'); // Assuming "create-account.ejs" is in the views directory
 });
 app.use("/create-account", signUpRouter);
+app.get('/forgot-password.ejs', (req, res) => {
+    console.log("테스트 페이지!");
+    res.render('forgot-password'); // Assuming "forgot-password.ejs" is in the views directory
+});
+
 
 function loginRequired(req, res, next) {
   // 미 로그인
@@ -109,15 +88,28 @@ function loginRequired(req, res, next) {
   next();
 }
 
+app.get("/groupmanage.ejs", loginRequired, (req, res) => {
+  console.log("테스트 페이지!");
+  res.render("groupmanage", {}); // Assuming "groupmanagerslist.ejs" is in the views directory
+});
+
 app.get("/groupparticipantslists.ejs", loginRequired, (req, res) => {
   console.log("테스트 페이지!");
   res.render("groupparticipantslists", {}); // Assuming "groupmanagerslist.ejs" is in the views directory
 });
 
-app.get('/board/post', (req, res) => {
-  res.render('post');
+app.get("/groupmanagerslists.ejs", loginRequired, (req, res) => {
+    console.log("테스트 페이지!");
+    res.render("groupmanagerslists", {}); // Assuming "groupmanagerslist.ejs" is in the views directory
 });
 
+app.get("/groupsettings.ejs", loginRequired, (req, res) => {
+  console.log("테스트 페이지!");
+  res.render("groupsettings", {}); // Assuming "groupmanagerslist.ejs" is in the views directory
+});
+// Add other routes that require authentication here
+
+// RESTful API routes
 app.get('/user/clubs', loginRequired, async (req, res) => {
   try {
       const userId = req.user.user_id;
@@ -138,45 +130,52 @@ app.use('/clubs', clubRouter);
 
 app.use('/clubs/:clubId/members', clubRouter);
 
+app.use('clubs/:clubId/members/:memberId/assign-leader', clubRouter);
 
-app.get('/', async (req, res) => {
-
-  subclubuserRouter
- 
+// Assuming these routes are also protected
+app.get('/board.ejs', loginRequired, (req, res) => {
+    console.log("테스트 페이지!");
+    res.render('board'); // Assuming "board.ejs" is in the views directory
+});
+app.get('/board_detail.ejs', loginRequired, (req, res) => {
+    console.log("테스트 페이지!");
+    res.render('board_detail'); // Assuming "board_detail.ejs" is in the views directory
+});
+app.get('/board_write.ejs', loginRequired, (req, res) => {
+    console.log("테스트 페이지!");
+    res.render('board_write'); // Assuming "board_write.ejs" is in the views directory
+});
+app.get('/index.ejs', loginRequired, (req, res) => {
+    console.log("테스트 페이지!");
+    res.render('index'); // Assuming "index.ejs" is in the views directory
 });
 
-app.get('/subclub', (req, res) => {
-  user=req.user
-  res.render('smallgrouplists');
-})
+app.use('/schedule', scheduleRouter);
 
-app.get('/mainpage', (req, res) => {
+app.get('/mypage-privacy.ejs', loginRequired, (req, res) => {
+  console.log("테스트 페이지!");
+  res.render('mypage-privacy'); // Assuming "index.ejs" is in the views directory
+});
 
-  res.render('index');
-})
-app.get('/', (req, res) => {
- 
-  scheduleRouter
+app.use('/user', userRouter);
 
-})
-app.get('/schedule', (req, res) => {
-  scheduleRouter
-})
+app.get('/mypage-writelists.ejs', loginRequired, (req, res) => {
+  console.log("테스트 페이지!");
+  res.render('mypage-writelists'); // Assuming "index.ejs" is in the views directory
+});
 
-app.post('/', (req, res) => {
-  console.log(req.body)
-  scheduleRouter
+app.get('/smallgrouplists.ejs', loginRequired, (req, res) => {
+  console.log("테스트 페이지!");
+  res.render('smallgrouplists'); // Assuming "index.ejs" is in the views directory
+});
 
-})
-app.use("/mainpage", scheduleRouter); 
-
-app.use("/posts", postRouter);
-
-app.use('/',subclubuserRouter)
-app.use("/subclub",SubClublistROuter)
+app.get('/smallgroupsettings.ejs', loginRequired, (req, res) => {
+  console.log("테스트 페이지!");
+  res.render('smallgroupsettings'); // Assuming "index.ejs" is in the views directory
+});
 
 app.listen(3000, async () => {
-  console.log("3000번 서버 가동");
-  await sequelize.authenticate();
-  console.log("db authenticate");
+    console.log("3000번 서버 가동");
+    await sequelize.authenticate();
+    console.log("db authenticate");
 });

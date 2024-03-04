@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>게시글</title>
+
+    <!-- css -->
+    <link rel="stylesheet" href="/css/tailwind.output.css" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+
+    <!-- Alpine js -->
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script src="/js/init-alpine.js"></script>
+
+
+
+
+    <!-- summernote 
+    <script src="./assets/js/summernote/summernote-lite.js"></script>
+    <script src="./assets/js/summernote/lang/summernote-ko-KR.js"></script>
+    <link rel="stylesheet" href="./assets/css/summernote/summernote-lite.css"> -->
+
+</head>
+
+<body>
+    <div x-show="isPopupOpen || isNewPopupOpen"
+        class="fixed inset-0 z-30 bg-black bg-opacity-50 flex items-center justify-center">
+        <div x-show="isPopupOpen" class="bg-white w-196 p-6 rounded-lg relative">
+            <button @click="closePopup" class="absolute top-0 right-0 mt-2 mr-2 text-gray-600 hover:text-gray-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+            <div class="mb-2 flex flex-col text-center">
+                <span class="font-medium px-24 mt-2 mb-8">모임 참여</span>
+                <span class="text-xxs ml-1 text-left">모임 코드</span>
+                <input class="block mt-2 mb-2 text-xxs text-black form-input" style="min-width: 350px;" />
+            </div>
+            <div class="mb-8 text-blue-500 underline text-xxs text-center cursor-pointer"
+                x-on:click="closePopupAndOpenNewPopup">
+                새로운 모임을 생성하시겠습니까?
+            </div>
+            <div class="mt-2 mb-4 flex items-center justify-center">
+                <button
+                    class="px-4 py-2 text-xs font-semibold leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                    @click="closePopup">
+                    참여하기
+                </button>
+            </div>
+        </div>
+
+        <div x-show="isNewPopupOpen" class="bg-white w-196 p-6 rounded-lg relative">
+            <button @click="closeNewPopup" class="absolute top-0 right-0 mt-2 mr-2 text-gray-600 hover:text-gray-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+            <div class="mb-2 flex flex-col text-center">
+                <span class="font-medium px-24 mt-2 mb-8">모임 생성</span>
+                <div class=" mb--2 flex justify-end relative">
+
+                    <button
+                        class="px-2 py-1 text-xxs leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                        @click="toggleColorPalette" :style="{ backgroundColor: isColorPaletteOpen ? selectColor : '' }">
+                        <span class="flex items-center">
+                            색상
+                            <svg class="w-3 h-3 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </span>
+                    </button>
+
+                    <!-- 색상 팔레트 (초기에는 숨겨져 있음) -->
+                    <div x-show="isColorPaletteOpen" class="mt-2 p-2 border border-gray-300 rounded-lg absolute z-60"
+                        style="position: absolute; top: 25px; left: 140px; background-color: white;">
+                        <!-- 컬러 선택 옵션들 -->
+                        <div class="flex">
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#00C19E')"
+                                style="background-color: #00C19E;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#00CB39')"
+                                style="background-color: #00CB39;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#C2E200')"
+                                style="background-color: #C2E200;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#F1E800')"
+                                style="background-color: #F1E800;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#F9C200')"
+                                style="background-color: #F9C200;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#F59300')"
+                                style="background-color: #F59300;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#F96900')"
+                                style="background-color: #F96900;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#FB0000')"
+                                style="background-color: #FB0000;"></div>
+                        </div>
+                        <div class="flex mt-2">
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#00CBE7')"
+                                style="background-color: #00CBE7;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#0082DF')"
+                                style="background-color: #0082DF;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#0026EE')"
+                                style="background-color: #0026EE;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#7000FF')"
+                                style="background-color: #7000FF;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#A400F2')"
+                                style="background-color: #A400F2;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#FF6CDF')"
+                                style="background-color: #FF6CDF;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#979797')"
+                                style="background-color: #979797;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#353535')"
+                                style="background-color: #353535;"></div>
+                        </div>
+                    </div>
+
+                </div>
+                <span class="text-xxs ml-1 text-left">모임 이름</span>
+                <input class="block mt-2 mb-2 text-xxs text-black form-input" style="min-width: 350px;" />
+                <span class="text-xxs ml-1 text-left">모임 설명</span>
+                <textarea class="block mt-2 mb-2 text-xxs text-black form-input resize-none"
+                    style="min-width: 350px; min-height: 70px;"></textarea>
+                <span class="text-xxs ml-1 text-left text-top">모임 코드</span>
+                <input class="block mt-2 mb-2 text-xxs text-black form-input" style="min-width: 350px;" />
+            </div>
+            <div class="mt-2 mb-4 flex items-center justify-center">
+                <button
+                    class="px-4 py-2 text-xs font-semibold leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                    @click="closeNewPopup">
+                    완료
+                </button>
+            </div>
+        </div>
+    </div>
+    <div x-show="isSGPopupOpen || isNewSGPopupOpen"
+        class="fixed inset-0 z-30 bg-black bg-opacity-50 flex items-center justify-center">
+        <div x-show="isSGPopupOpen" class="bg-white w-196 p-6 rounded-lg relative">
+            <button @click="closeSGPopup" class="absolute top-0 right-0 mt-2 mr-2 text-gray-600 hover:text-gray-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+            <div class="mb-2 flex flex-col text-center">
+                <span class="font-medium px-24 mt-2 mb-8">소모임 참여</span>
+                <span class="text-xxs ml-1 text-left">소모임 코드</span>
+                <input class="block mt-2 mb-2 text-xxs text-black form-input" style="min-width: 350px;" />
+            </div>
+
+            <div class="mb-8 text-blue-500 underline text-xxs text-center cursor-pointer"
+                x-on:click="closeSGPopupAndOpenNewSGPopup">
+                새로운 소모임을 생성하시겠습니까?
+            </div>
+            <div class="mt-2 mb-4 flex items-center justify-center">
+                <button
+                    class="px-4 py-2 text-xs font-semibold leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                    @click="closeSGPopup">
+                    참여하기
+                </button>
+            </div>
+        </div>
+
+        <div x-show="isNewSGPopupOpen" class="bg-white w-196 p-6 rounded-lg relative">
+            <button @click="closeNewSGPopup" class="absolute top-0 right-0 mt-2 mr-2 text-gray-600 hover:text-gray-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+            <div class="mb-2 flex flex-col text-center">
+                <span class="font-medium px-24 mt-2 mb-4">소모임 생성</span>
+                <div class=" mb--2 flex justify-end relative">
+                    <button
+                        class="px-2 py-1 text-xxs leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                        @click="toggleColorPalette"
+                        :style="{ backgroundColor: isColorPaletteOpen ? selectedColor : '' }">
+                        <span class="flex items-center">
+                            색상
+                            <svg class="w-3 h-3 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </span>
+                    </button>
+
+                    <!-- 색상 팔레트 (초기에는 숨겨져 있음) -->
+                    <div x-show="isColorPaletteOpen" class="mt-2 p-2 border border-gray-300 rounded-lg absolute z-60"
+                        style="position: absolute; top: 25px; left: 140px; background-color: white;">
+                        <!-- 컬러 선택 옵션들 -->
+                        <div class="flex">
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#00C19E')"
+                                style="background-color: #00C19E;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#00CB39')"
+                                style="background-color: #00CB39;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#C2E200')"
+                                style="background-color: #C2E200;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#F1E800')"
+                                style="background-color: #F1E800;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#F9C200')"
+                                style="background-color: #F9C200;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#F59300')"
+                                style="background-color: #F59300;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#F96900')"
+                                style="background-color: #F96900;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#FB0000')"
+                                style="background-color: #FB0000;"></div>
+                        </div>
+                        <div class="flex mt-2">
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#00CBE7')"
+                                style="background-color: #00CBE7;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#0082DF')"
+                                style="background-color: #0082DF;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#0026EE')"
+                                style="background-color: #0026EE;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#7000FF')"
+                                style="background-color: #7000FF;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#A400F2')"
+                                style="background-color: #A400F2;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#FF6CDF')"
+                                style="background-color: #FF6CDF;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#979797')"
+                                style="background-color: #979797;"></div>
+                            <div class="w-4 h-4 mx-1 cursor-pointer" @click="selectColor('#353535')"
+                                style="background-color: #353535;"></div>
+                        </div>
+                    </div>
+                </div>
+                <span class="text-xxs ml-1 text-left">소모임 이름</span>
+                <input class="block mt-2 mb-2 text-xxs text-black form-input" style="min-width: 350px;" />
+                <span class="text-xxs ml-1 text-left">소모임 설명</span>
+                <textarea class="block mt-2 mb-2 text-xxs text-black form-input resize-none"
+                    style="min-width: 350px; min-height: 70px;"></textarea>
+                <span class="text-xxs ml-1 text-left text-top">소모임 코드</span>
+                <input class="block mt-2 mb-2 text-xxs text-black form-input" style="min-width: 350px;" />
+                <div class="mt-4 mb-4 flex items-center justify-center">
+                    <button
+                        class="px-4 py-2 text-xs font-semibold leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                        @click="closeNewSGPopup">
+                        완료
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen}">
+        <!-- Desktop sidebar -->
+        <aside class="relative z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
+            <div class="py-4 text-gray-500 dark:text-gray-400 text-center">
+                <a class="inline-block text-lg font-bold text-gray-800 dark:text-gray-200 mt-4" href="index.ejs">
+                    TITLE
+                </a>
+                <ul class="mt-6">
+                    <!-- nav 메뉴 1 -->
+                    <li class="relative px-6 py-3">
+                        <div class="flex">
+                            <a
+                            class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                            href="index.ejs">
+                                <span class="inline-flex items-center">
+                                    <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                                        stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path
+                                            d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z">
+                                        </path>
+                                    </svg>
+                                    <span class="ml-4">모임 1</span>
+                                </span>
+                            </a>
+                            <!-- 메뉴 펼치기 버튼 -->
+                            <button class="w-4 h-4" @click="togglePagesMenu(1)" aria-haspopup="true">
+                                <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <!-- 숨겨지는 메뉴 -->
+                        <template x-if="isPagesMenuOpen === 1">
+                            <ul x-transition:enter="transition-all ease-in-out duration-300"
+                                x-transition:enter-start="opacity-25 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-xl"
+                                x-transition:leave="transition-all ease-in-out duration-300"
+                                x-transition:leave-start="opacity-100 max-h-xl"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900 text-left"
+                                aria-label="submenu">
+                                <li
+                                    class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                    <a class="w-full" href="board.ejs">View</a>
+                                </li>
+                                <li
+                                    class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                    <a class="w-full" href="board.ejs">
+                                        Model
+                                    </a>
+                                </li>
+                                <li
+                                    class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                    <a class="w-full" href="board.ejs">
+                                        Controller
+                                    </a>
+                                </li>
+                            </ul>
+                        </template>
+                    </li>
+                    <!-- nav 메뉴 2 -->
+                    <li class="relative px-6 py-3">
+                        <div class="flex">
+                            <a
+                            class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                            href="index.ejs">
+                                <span class="inline-flex items-center">
+                                    <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                                        stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path
+                                            d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z">
+                                        </path>
+                                    </svg>
+                                    <span class="ml-4">모임 1</span>
+                                </span>
+                            </a>
+                            <!-- 메뉴 펼치기 버튼 -->
+                            <button class="w-4 h-4" @click="togglePagesMenu(2)" aria-haspopup="true">
+                                <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <!-- 숨겨지는 메뉴 -->
+                        <template x-if="isPagesMenuOpen === 2">
+                            <ul x-transition:enter="transition-all ease-in-out duration-300"
+                                x-transition:enter-start="opacity-25 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-xl"
+                                x-transition:leave="transition-all ease-in-out duration-300"
+                                x-transition:leave-start="opacity-100 max-h-xl"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900 text-left"
+                                aria-label="submenu">
+                                <li
+                                    class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                    <a class="w-full" href="board.ejs">View</a>
+                                </li>
+                                <li
+                                    class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                    <a class="w-full" href="board.ejs">
+                                        Model
+                                    </a>
+                                </li>
+                                <li
+                                    class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                    <a class="w-full" href="board.ejs">
+                                        Controller
+                                    </a>
+                                </li>
+                            </ul>
+                        </template>
+                    </li>
+                </ul>
+                <div class="absolute px-8 my-4 w-full" style="bottom: 0;">
+                    <button @click="openPopup"
+                        class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                        모임
+                        <span class="ml-2" aria-hidden="true">+</span>
+                    </button>
+                    <div class="mt-2"></div>
+                    <button @click="openSGPopup"
+                        class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                        소모임
+                        <span class="ml-2" aria-hidden="true">+</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+        <!-- Mobile sidebar -->
+        <!-- Backdrop -->
+        <div x-show="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in-out duration-150" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 z-10 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center"></div>
+        <aside class="fixed inset-y-0 z-20 flex-shrink-0 w-64 mt-16 overflow-y-auto bg-white dark:bg-gray-800 md:hidden"
+            x-show="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150"
+            x-transition:enter-start="opacity-0 transform -translate-x-20" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in-out duration-150" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0 transform -translate-x-20" @click.away="closeSideMenu"
+            @keydown.escape="closeSideMenu">
+            <div class="py-4 text-gray-500 dark:text-gray-400">
+                <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
+                    TITLE
+                </a>
+                <ul class="mt-6">
+                    <!-- nav 메뉴 1 -->
+                    <li class="relative px-6 py-3">
+                        <div class="flex">
+                            <a
+                            class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                            href="index.ejs">
+                                <span class="inline-flex items-center">
+                                    <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                                        stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path
+                                            d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z">
+                                        </path>
+                                    </svg>
+                                    <span class="ml-4">모임 1</span>
+                                </span>
+                            </a>
+                            <!-- 메뉴 펼치기 버튼 -->
+                            <button class="w-4 h-4" @click="togglePagesMenu(1)" aria-haspopup="true">
+                                <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <!-- 숨겨지는 메뉴 -->
+                        <template x-if="isPagesMenuOpen === 1">
+                            <ul x-transition:enter="transition-all ease-in-out duration-300"
+                                x-transition:enter-start="opacity-25 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-xl"
+                                x-transition:leave="transition-all ease-in-out duration-300"
+                                x-transition:leave-start="opacity-100 max-h-xl"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900 text-left"
+                                aria-label="submenu">
+                                <li
+                                    class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                    <a class="w-full" href="board.ejs">View</a>
+                                </li>
+                                <li
+                                    class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                    <a class="w-full" href="board.ejs">
+                                        Model
+                                    </a>
+                                </li>
+                                <li
+                                    class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                    <a class="w-full" href="board.ejs">
+                                        Controller
+                                    </a>
+                                </li>
+                            </ul>
+                        </template>
+                    </li>
+                    <!-- nav 메뉴 2 -->
+                    <li class="relative px-6 py-3">
+                        <div class="flex">
+                            <a
+                            class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                            href="index.ejs">
+                                <span class="inline-flex items-center">
+                                    <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                                        stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path
+                                            d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z">
+                                        </path>
+                                    </svg>
+                                    <span class="ml-4">모임 2</span>
+                                </span>
+                            </a>
+                            <!-- 메뉴 펼치기 버튼 -->
+                            <button class="w-4 h-4" @click="togglePagesMenu(2)" aria-haspopup="true">
+                                <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <!-- 숨겨지는 메뉴 -->
+                        <template x-if="isPagesMenuOpen === 2">
+                            <ul x-transition:enter="transition-all ease-in-out duration-300"
+                                x-transition:enter-start="opacity-25 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-xl"
+                                x-transition:leave="transition-all ease-in-out duration-300"
+                                x-transition:leave-start="opacity-100 max-h-xl"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900 text-left"
+                                aria-label="submenu">
+                                <li
+                                    class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                    <a class="w-full" href="board.ejs">View</a>
+                                </li>
+                                <li
+                                    class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                    <a class="w-full" href="board.ejs">
+                                        Model
+                                    </a>
+                                </li>
+                                <li
+                                    class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                    <a class="w-full" href="board.ejs">
+                                        Controller
+                                    </a>
+                                </li>
+                            </ul>
+                        </template>
+                    </li>
+                </ul>
+                <div class="absolute px-8 my-4 w-full" style="bottom: 0;">
+                    <button @click="openPopup"
+                        class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                        모임
+                        <span class="ml-2" aria-hidden="true">+</span>
+                    </button>
+                    <div class="mt-2"></div>
+                    <button @click="openSGPopup"
+                        class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                        소모임
+                        <span class="ml-2" aria-hidden="true">+</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+        <div class="flex flex-col flex-1">
+            <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
+                <div
+                    class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
+                    <!-- Mobile hamburger -->
+                    <button class="p-1 -ml-1 mr-5 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
+                        @click="toggleSideMenu" aria-label="Menu">
+                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                    <!-- Search input -->
+                    <div class="flex justify-center flex-1 lg:mr-32 items-center">
+                        <!-- 전체/작성자/내용 -->
+                        <div class="mr-4">
+                            <div class="inline select_div">
+                                <select
+                                    class="text-align-last select_s text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
+                                    <option value="all" selected>전체</option>
+                                    <option value="writer">작성자</option>
+                                    <option value="content">내용</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Search -->
+                        <div class="relative w-full max-w-xl mr-6 focus-within:text-purple-500">
+                            <div class="absolute inset-y-0 flex items-center pl-2">
+                                <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <input
+                                class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-white focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
+                                type="text" placeholder="Search for projects" aria-label="Search" />
+                        </div>
+                    </div>
+                    <ul class="flex items-center flex-shrink-0 space-x-6">
+                        <!-- Theme toggler -->
+                        <li class="flex">
+                            <button class="rounded-md focus:outline-none focus:shadow-outline-purple"
+                                @click="toggleTheme" aria-label="Toggle color mode">
+                                <template x-if="!dark">
+                                    <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z">
+                                        </path>
+                                    </svg>
+                                </template>
+                                <template x-if="dark">
+                                    <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                </template>
+                            </button>
+                        </li>
+                        <!-- Profile menu -->
+                        <li class="relative">
+                            <button class="align-middle rounded-full focus:shadow-outline-purple focus:outline-none"
+                                @click="toggleProfileMenu" @keydown.escape="closeProfileMenu" aria-label="Account"
+                                aria-haspopup="true">
+                                <img class="object-cover w-8 h-8 rounded-full"
+                                    src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82"
+                                    alt="" aria-hidden="true" />
+                            </button>
+                            <template x-if="isProfileMenuOpen">
+                                <ul x-transition:leave="transition ease-in duration-150"
+                                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                    @click.away="closeProfileMenu" @keydown.escape="closeProfileMenu"
+                                    class="absolute right-0 w-56 p-2 mt-2 space-y-2 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md dark:border-gray-700 dark:text-gray-300 dark:bg-gray-700"
+                                    aria-label="submenu">
+                                    <li class="flex">
+                                        <a class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                                            href="mypage-privacy.ejs">
+                                            <svg class="w-4 h-4 mr-3" aria-hidden="true" fill="none"
+                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path
+                                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                                                </path>
+                                                <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            </svg>
+                                            <span>Settings</span>
+                                        </a>
+                                    </li>
+                                    <li class="flex">
+                                        <a class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                                            href="login.ejs">
+                                            <svg class="w-4 h-4 mr-3" aria-hidden="true" fill="none"
+                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path
+                                                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
+                                                </path>
+                                            </svg>
+                                            <span>Log out</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </template>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <main class="h-full pb-16 overflow-y-auto">
+                <div class="container px-6 mx-auto grid">
+                    <!-- General elements -->
+                    <h4 class="my-8 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
+                        <span>모임1</span>
+                        <span> > </span>
+                        <span>Controller</span>
+                    </h4>
+                    <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                        <table class="w-full dark:border-gray-600 table-radius"> <!--  form-textarea  -->
+                            <tr class="border-b table-style py-4 dark:border-gray-600">
+                                <th class="bg-gray-100 py-4 text-gray-600 dark:text-gray-300 dark:bg-gray-700">제목</th>
+                                <td colspan="3" class="py-4 px-3 text-gray-600 dark:text-gray-300 dark:bg-gray-800">[홍보]
+                                    디지털 시대의 로우코드 플랫폼</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-gray-100 py-4 text-gray-600 dark:text-gray-300 dark:bg-gray-700">작성자</th>
+                                <td class="py-4 px-3 text-gray-600 dark:text-gray-300 dark:bg-gray-800">swuswu</td>
+                                <th class="bg-gray-100 py-4 text-gray-600 dark:text-gray-300 dark:bg-gray-700">작성일</th>
+                                <td class="py-4 px-3 text-gray-600 dark:text-gray-300 dark:bg-gray-800">2023-10-10 13:23
+                                </td>
+                            </tr>
+                        </table>
+                        <div
+                            class="block mt-4 mb-4 p-6 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea">
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin blandit finibus enim, non
+                                ultricies nisl egestas porta. Aenean quis felis eget lectus blandit vehicula vitae ut
+                                turpis. Nunc quis ultrices ipsum. Pellentesque eget convallis purus. Donec ante lectus,
+                                malesuada aliquam arcu eu, varius faucibus eros. Morbi ligula elit, convallis vel enim
+                                sed, aliquam consectetur libero. Etiam id posuere arcu.
+
+                                Vestibulum eu ex id sem aliquet varius. Morbi consectetur tempus quam in congue. Fusce
+                                ut porttitor libero. Donec porttitor diam ac risus viverra, non lobortis velit bibendum.
+                                Donec quis elit a velit varius sagittis non id felis. Suspendisse finibus ante fringilla
+                                viverra sollicitudin. Nulla facilisi. Vestibulum hendrerit vehicula nibh, eu imperdiet
+                                lacus sollicitudin ut. Donec ante nibh, condimentum non erat sed, vehicula congue nisl.
+                                Vestibulum fermentum purus at lorem mollis tristique. Donec augue ex, maximus sed
+                                consectetur sit amet, euismod at metus. Duis molestie est non neque aliquet dignissim.
+                                Nam fringilla libero sed dui dapibus, id condimentum dui porttitor. In hac habitasse
+                                platea dictumst.
+
+                                Donec eu maximus leo. Sed ut lacus ut purus laoreet venenatis. Praesent et ex aliquet,
+                                gravida orci non, consequat orci. Etiam eleifend, felis eget sodales porta, dolor mauris
+                                tempor lacus, ac elementum tellus urna nec arcu. Aenean sit amet iaculis tellus, in
+                                pretium magna. Ut vulputate tempor rutrum. Praesent pulvinar dolor tempus ipsum cursus
+                                finibus.
+
+                                Etiam eget sagittis erat. Aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetur
+                                adipiscing elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
+                                inceptos himenaeos. Fusce laoreet ex tristique porttitor ullamcorper. Aenean iaculis
+                                felis elit, in pulvinar leo lacinia a. Etiam turpis enim, vestibulum vitae neque
+                                ultrices, tempus tincidunt nisi. Suspendisse posuere nec nibh sit amet ullamcorper.
+                                Morbi velit lectus, feugiat at accumsan id, sagittis a metus. Suspendisse vehicula mi
+                                molestie ante feugiat, viverra ornare ligula mattis. Praesent purus orci, consequat in
+                                egestas nec, hendrerit id mauris.
+
+                                Suspendisse aliquam nibh non justo interdum rutrum. Phasellus fringilla orci orci, sed
+                                mattis diam ultrices vel. Morbi vitae pellentesque neque, a sodales lacus. Integer non
+                                rutrum erat, lobortis cursus ante. Sed placerat luctus elementum. Morbi vehicula ac
+                                lorem quis congue. Mauris leo justo, tempor at venenatis vitae, tincidunt eu ex. Cras
+                                placerat sapien risus, vel tincidunt odio ornare sed. Nam varius est eu lorem fringilla
+                                maximus. Suspendisse nulla elit, ultrices ac libero in, iaculis semper quam. Suspendisse
+                                non justo a eros interdum posuere. Donec rutrum dolor est, in aliquam magna iaculis ac.
+                                Proin arcu metus, placerat at nisi vel, eleifend volutpat nisi. Etiam faucibus massa
+                                nulla, non viverra neque auctor at.
+                            </p>
+                        </div>
+                        <div class="flex items-center mb-2">
+                            <!-- like button -->
+                            <div class="mr-2 ml-3">
+                                <button
+                                    class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                    aria-label="Like">
+                                    <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                                            clip-rule="evenodd" fill-rule="evenodd"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="mr-4">
+                                <p class="text-gray-600 dark:text-gray-300">10</p>
+                            </div>
+                            <!-- comment button -->
+                            <div class="mr-2">
+                                <button id="openCommentBtn"
+                                    class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                    aria-label="Edit">
+                                    <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+                                        </path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="mr-4">
+                                <p class="text-gray-600 dark:text-gray-300">5</p>
+                            </div>
+                            <!-- 수정/삭제 -->
+                            <div class="inline-block items-center ml-auto">
+                                <div class="inline select_div mt-2 mb-2">
+                                    <select
+                                        class="select_s text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
+                                        <option value="">설정</option>
+                                        <option value="change">수정</option>
+                                        <option value="delete">삭제</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="commentSection"
+                        class="container flex justify-between px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                        <label class="block text-sm">
+                            <textarea
+                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                placeholder="댓글을 작성하세요.">
+                            </textarea>
+                        </label>
+
+                        <div class="flex justify-end mt-2">
+                            <button
+                                class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                                등록
+                            </button>
+                        </div>
+                        <!-- 댓글1 -->
+                        <div
+                            class="block mt-4 mb-4 p-4 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea">
+                            <div class="flex items-center text-sm">
+                                <!-- Avatar with inset shadow -->
+                                <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
+                                    <img class="object-cover w-full h-full rounded-full"
+                                        src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
+                                        alt="" loading="lazy" />
+                                    <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
+                                </div>
+                                <div>
+                                    <p class="font-semibold">Kim Hayeon</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">
+                                        2 days ago
+                                    </p>
+                                </div>
+                                <div class="ml-6">
+                                    <p class="font-medium">확인했습니다!</p>
+                                </div>
+                                <!-- 수정/삭제 -->
+                                <div class="inline-block items-center ml-auto">
+                                    <div class="inline select_div mt-2 mb-2">
+                                        <select
+                                            class="select_s text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input">
+                                            <option value="">설정</option>
+                                            <option value="change">수정</option>
+                                            <option value="delete">삭제</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+
+<script>
+    // JavaScript로 버튼 클릭 이벤트 처리
+    document.getElementById('openCommentBtn').addEventListener('click', function () {
+        // 댓글 창이 현재 숨겨져 있다면 보이도록 하고, 숨겨져 있다면 감추도록 설정
+        var commentSection = document.getElementById('commentSection');
+        commentSection.style.display = (commentSection.style.display === 'none' || commentSection.style.display === '') ? 'block' : 'none';
+    });
+
+    // 클릭 시 탭 열림
+    function toggleSubMenu(submenuId) {
+        var submenu = document.getElementById(submenuId);
+        submenu.classList.toggle('hidden');
+    }
+</script>
+
+</html>
