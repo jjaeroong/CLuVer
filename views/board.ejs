@@ -653,149 +653,25 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                                    <tr class="text-gray-700 dark:text-gray-400">
-                                        <td class="px-4 py-3">
-                                            1
-                                        </td>
-                                        <td class="px-4 py-3 text-sm font-semibold">
-                                            <a href="board_detail.ejs">[홍보] 디지털 시대의 로우코드 플랫폼</a>
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            swuswu
-                                        </td>
-                                        <td class="px-4 py-3 text-xs">
-                                            2023.03.16
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            316
-                                        </td>
-                                    </tr>
-
-                                    <tr class="text-gray-700 dark:text-gray-400">
-                                        <td class="px-4 py-3">
-                                            1
-                                        </td>
-                                        <td class="px-4 py-3 text-sm font-semibold">
-                                            2023학년도 1학기 소프트웨어역량인증
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            swuswu
-                                        </td>
-                                        <td class="px-4 py-3 text-xs">
-                                            2023.03.16
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            316
-                                        </td>
-                                    </tr>
-
-                                    <tr class="text-gray-700 dark:text-gray-400">
-                                        <td class="px-4 py-3">
-                                            1
-                                        </td>
-                                        <td class="px-4 py-3 text-sm font-semibold">
-                                            2023학년도 1학기 소프트웨어역량인증
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            swuswu
-                                        </td>
-                                        <td class="px-4 py-3 text-xs">
-                                            2023.03.16
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            316
-                                        </td>
-                                    </tr>
-
-                                    <tr class="text-gray-700 dark:text-gray-400">
-                                        <td class="px-4 py-3">
-                                            1
-                                        </td>
-                                        <td class="px-4 py-3 text-sm font-semibold">
-                                            2023학년도 1학기 소프트웨어역량인증
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            swuswu
-                                        </td>
-                                        <td class="px-4 py-3 text-xs">
-                                            2023.03.16
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            316
-                                        </td>
-                                    </tr>
-
-                                    <tr class="text-gray-700 dark:text-gray-400">
-                                        <td class="px-4 py-3">
-                                            1
-                                        </td>
-                                        <td class="px-4 py-3 text-sm font-semibold">
-                                            2023학년도 1학기 소프트웨어역량인증
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            swuswu
-                                        </td>
-                                        <td class="px-4 py-3 text-xs">
-                                            2023.03.16
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            316
-                                        </td>
-                                    </tr>
-
-                                    <tr class="text-gray-700 dark:text-gray-400">
-                                        <td class="px-4 py-3">
-                                            1
-                                        </td>
-                                        <td class="px-4 py-3 text-sm font-semibold">
-                                            2023학년도 1학기 소프트웨어역량인증
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            swuswu
-                                        </td>
-                                        <td class="px-4 py-3 text-xs">
-                                            2023.03.16
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            316
-                                        </td>
-                                    </tr>
-
-                                    <tr class="text-gray-700 dark:text-gray-400">
-                                        <td class="px-4 py-3">
-                                            1
-                                        </td>
-                                        <td class="px-4 py-3 text-sm font-semibold">
-                                            2023학년도 1학기 소프트웨어역량인증
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            swuswu
-                                        </td>
-                                        <td class="px-4 py-3 text-xs">
-                                            2023.03.16
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            316
-                                        </td>
-                                    </tr>
-
-                                    <tr class="text-gray-700 dark:text-gray-400">
-                                        <td class="px-4 py-3">
-                                            1
-                                        </td>
-                                        <td class="px-4 py-3 text-sm font-semibold">
-                                            2023학년도 1학기 소프트웨어역량인증
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            swuswu
-                                        </td>
-                                        <td class="px-4 py-3 text-xs">
-                                            2023.03.16
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            316
-                                        </td>
-                                    </tr>
+                                    <% allPostsExceptRecent.forEach(post => { %>
+                                        <tr class="text-gray-700 dark:text-gray-400">
+                                            <td class="px-4 py-3">
+                                                <%= post.id %> <!-- 게시글 번호 -->
+                                            </td>
+                                            <td class="px-4 py-3 text-sm font-semibold">
+                                                <a href="board_detail.ejs"><%= post.post_title %></a> <!-- 게시글 제목 -->
+                                            </td>
+                                            <td class="px-4 py-3 text-sm">
+                                                <%= post.author %> <!-- 작성자 -->
+                                            </td>
+                                            <td class="px-4 py-3 text-xs">
+                                                <%= post.post_create_at %> <!-- 작성일 -->
+                                            </td>
+                                            <td class="px-4 py-3 text-sm">
+                                                <%= post.views %> <!-- 조회수 -->
+                                            </td>
+                                        </tr>
+                                    <% }); %>
 
                                 </tbody>
                             </table>

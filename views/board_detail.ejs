@@ -716,8 +716,9 @@
                                     </svg>
                                 </button>
                             </div>
-                            <div class="mr-4">
-                                <p class="text-gray-600 dark:text-gray-300">10</p>
+                            <!-- 좋아요 수 출력 -->
+                             <div class="mr-4">
+                            <p id="likeCount" class="text-gray-600 dark:text-gray-300"><%= post.like_number %></p>
                             </div>
                             <!-- comment button -->
                             <div class="mr-2">
@@ -750,6 +751,25 @@
                     </div>
                     <div id="commentSection"
                         class="container flex justify-between px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                        <form action="/createComment" method="POST" class="w-full"> <!-- 추가된 부분 -->
+                            <label class="block text-sm">
+                                <textarea
+                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                    name="comment_content" placeholder="댓글을 작성하세요."></textarea>
+                                <input type="hidden" name="post_id" value="<%= post.id %>">
+                                <input type="hidden" name="user_id" value="<%= user.id %>">
+                                <input type="hidden" name="club_id" value="<%= club.id %>">
+                                <input type="hidden" name="sub_id" value="<%= subclub.id %>">
+                            </label>
+                    
+                            <div class="flex justify-end mt-2">
+                                <button type="submit"
+                                    class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                                    등록
+                                </button>
+                            </div>
+                        </form>
+
                         <label class="block text-sm">
                             <textarea
                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -763,6 +783,8 @@
                                 등록
                             </button>
                         </div>
+
+
                         <!-- 댓글1 -->
                         <div
                             class="block mt-4 mb-4 p-4 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea">
@@ -816,6 +838,22 @@
         var submenu = document.getElementById(submenuId);
         submenu.classList.toggle('hidden');
     }
+
+    document.getElementById('likeButton').addEventListener('click', async function () {
+            try {
+                const postId = '<%= post.id %>'; // 게시글 ID
+                const response = await fetch(`/likePost/${postId}`, { method: 'POST' });
+                if (response.ok) {
+                    const likeCount = document.getElementById('likeCount');
+                    // 좋아요 수 증가
+                    likeCount.textContent = parseInt(likeCount.textContent) + 1;
+                } else {
+                    console.error('좋아요 요청 실패');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        });
 </script>
 
 </html>

@@ -19,7 +19,7 @@ class Clubuser extends Sequelize.Model {
         allowNull: false
       },
       cate: {
-        type: Sequelize.INT,
+        type: Sequelize.INTEGER,
         allowNull: true
       },
     }, {

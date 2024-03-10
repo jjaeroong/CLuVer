@@ -17,7 +17,6 @@ class Subclubuser extends Sequelize.Model{
                 type: Sequelize.BIGINT,
                 allowNull: false,
                 primaryKey: true,
-
               },
               joinDate: {
                 type: Sequelize.DATE,
